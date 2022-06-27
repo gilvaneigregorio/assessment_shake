@@ -5,8 +5,6 @@ Gilvanei Gregório
 * FastAPI
 * SQLLite
 * OpenAPI
-* Docker
-* Docker compose
 All dependencies in requirements.txt
 
 ## Description

@@ -3,8 +3,8 @@ from abc import ABCMeta
 from fastapi import HTTPException
 import httpx
 
-from utils import Settings
-from models.CurrencyConvert import CurrencyConvert
+from core import Env
+from models.dto.CurrencyConvert import CurrencyConvert
 
 class CurrencyProvider(ABC):
     @staticmethod
@@ -19,7 +19,7 @@ class CurrencyProvider(ABC):
 
 class CurrencyDataAPI(CurrencyProvider):
     url_base = "https://api.apilayer.com/currency_data"
-    headers= {"apikey": Settings.currency_data_api_key}
+    headers= {"apikey": Env.CURRENCY_DATA_API_KEY}
 
     async def list() -> list[str]:
         async with httpx.AsyncClient() as client:
@@ -28,8 +28,7 @@ class CurrencyDataAPI(CurrencyProvider):
 
             result = response.json()
 
-            request_success = result['success']
-            CurrencyDataAPI.handle_request_errors(response.status_code, request_success, request_success)
+            CurrencyDataAPI.handle_request_errors(response.status_code, result)
 
             return result['currencies']
 
@@ -43,8 +42,7 @@ class CurrencyDataAPI(CurrencyProvider):
             response = await client.get(url, headers=CurrencyDataAPI.headers)
             result = response.json()
 
-            is_success = result['success']
-            CurrencyDataAPI.handle_request_errors(response.status_code, is_success, result)
+            CurrencyDataAPI.handle_request_errors(response.status_code, result)
 
             return CurrencyConvert (
                 source = result['query']['from'],
@@ -54,7 +52,8 @@ class CurrencyDataAPI(CurrencyProvider):
                 rate = result['info']['quote']
             )
 
-    def handle_request_errors(status_code: int, is_success: bool, request: dict):
+    def handle_request_errors(status_code: int, request: dict):
+        is_success = request.get('success', None)
         status_code_family = int(status_code % 100)
 
         if is_success is False:
@@ -77,6 +76,7 @@ class CurrencyDataAPI(CurrencyProvider):
             # 404 - Not Found	The requested resource doesn't exist.
             raise HTTPException(status_code = 400, detail =  "Bad Request, The request was unacceptable")
         
+
         if status_code_family == 5:
             # 5xx - Server Error	We have failed to process your request. (You can contact us anytime)
             raise HTTPException(status_code = 500, detail =  "BServer Error, We have failed to process your request")

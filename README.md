@@ -29,14 +29,14 @@ you can fix it by creating a .env on the root of the project and past these line
 APP_PORT=8042
 CURRENCY_DATA_API_KEY=lW7B5ZUHNxxm39YsjKlc5SZ9gQLvgF1O
 DATABASE_URI=sqlite:///shake.db
->> **I'm puting it here, just to ensure everything will works properly**
+>**I'm puting it here, just to ensure everything will works properly**
 
 I'm also committing a basic database file(shake.db) which contains already one user registered. You can use him to access
 the protectd endpoins.
 USERNAME=user@example.com
 PASSWORD=string
 
->> **In case of any question, please contact me gilvaneigregorio92@gmail.com**
+>**In case of any question, please contact me gilvaneigregorio92@gmail.com**
 
 ### Run Test
 Go to the root of the project and run
@@ -44,8 +44,11 @@ Go to the root of the project and run
 
 ### Run Project
 Go to the root of the project and run
+
 ```pip install -r requirements.txt```
+
 ```cd src```
+
 ```python main.py```
 
 ### Link API Documentation

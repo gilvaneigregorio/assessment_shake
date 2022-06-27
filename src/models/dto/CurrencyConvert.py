@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 
+
 class CurrencyConvert(BaseModel):
     source: str
     destination: str

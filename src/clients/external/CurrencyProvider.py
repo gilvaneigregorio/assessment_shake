@@ -6,7 +6,9 @@ import httpx
 from core import Env
 from models.dto.CurrencyConvert import CurrencyConvert
 
+
 class CurrencyProvider(ABC):
+
     @staticmethod
     @abstractmethod
     def list() -> list[str]:
@@ -16,6 +18,7 @@ class CurrencyProvider(ABC):
     @abstractmethod
     def convert(source: str, destination: str, amount: float, date: str) -> CurrencyConvert:
         pass
+
 
 class CurrencyDataAPI(CurrencyProvider):
     url_base = "https://api.apilayer.com/currency_data"
@@ -30,6 +33,7 @@ class CurrencyDataAPI(CurrencyProvider):
 
             CurrencyDataAPI.handle_request_errors(response.status_code, result)
 
+            print(result)
             return result['currencies']
 
 
@@ -57,6 +61,7 @@ class CurrencyDataAPI(CurrencyProvider):
         status_code_family = int(status_code % 100)
 
         if is_success is False:
+             # Other errors to raise '''
             if request['error']['code'] == 401:
                 raise HTTPException(status_code = 400, detail =  "You have entered an invalid \"source\" property. [Example: source=EUR]")
             if request['error']['code'] == 402:
@@ -71,12 +76,9 @@ class CurrencyDataAPI(CurrencyProvider):
             raise HTTPException(status_code = 429, detail =  "Too many requests, API request limit exceeded")
 
         if status_code in (400, 401, 404):
-            # 400 - Bad Request	The request was unacceptable, often due to missing a required parameter.
-            # 401 - Unauthorized	No valid API key provided.
-            # 404 - Not Found	The requested resource doesn't exist.
+            # 4XX - Bad Request	The request was unacceptable, often due to missing a required parameter '''
             raise HTTPException(status_code = 400, detail =  "Bad Request, The request was unacceptable")
         
-
         if status_code_family == 5:
-            # 5xx - Server Error	We have failed to process your request. (You can contact us anytime)
+            ''' 5xx - Server Error	We have failed to process your request. (You can contact us anytime) '''
             raise HTTPException(status_code = 500, detail =  "BServer Error, We have failed to process your request")

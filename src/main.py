@@ -15,4 +15,3 @@ app.include_router(API.router, prefix='/v1')
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=Env.APP_PORT)
-

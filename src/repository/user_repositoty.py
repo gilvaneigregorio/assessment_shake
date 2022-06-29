@@ -24,6 +24,6 @@ async def create(db: AsyncSession, obj_in: UserCreate):
     db_user = User(**create_data)
     db_user.password = get_password_hash(obj_in.password)
     db.add(db_user)
-    db.commit()
+    await db.commit()
 
     return db_user

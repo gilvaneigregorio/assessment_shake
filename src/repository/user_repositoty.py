@@ -1,9 +1,9 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from models.dao.User import User
-from models.dto.User import UserCreate
-from core.Security import get_password_hash
+from models.dao.user import User
+from models.dto.user import UserCreate
+from core.security import get_password_hash
 
 
 async def get_one_by_id(db: AsyncSession, id: str):
